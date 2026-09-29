@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NearWell neighborhood map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <style>
+    html, body, #map {height:100%;margin:0;}
+    body {background:#e6e8dd;font-family:Arial,sans-serif;}
+    .town-x {background:#fffdf6;border:2px solid #9f5338;border-radius:50%;box-sizing:border-box;color:#9f5338;box-shadow:0 2px 8px #0003;text-align:center;font:bold 28px/28px Arial,sans-serif;}
+    .town-label {background:#fffdf6;border:1px solid #c4c8b6;color:#2d493b;font:bold 12px Arial,sans-serif;box-shadow:0 2px 6px #0001;}
+    .leaflet-container {font-family:Arial,sans-serif;}
+  </style>
+</head>
+<body>
+  <div id="map" aria-label="Interactive map with X markers for Greenwich, New Canaan, and Tarrytown"></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+    const towns = [
+      {name:'Greenwich, CT', point:[41.0265,-73.6285]},
+      {name:'New Canaan, CT', point:[41.1468,-73.4948]},
+      {name:'Tarrytown, NY', point:[41.0762,-73.8587]}
+    ];
+    const map = L.map('map', {scrollWheelZoom:false});
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom:19,
+      attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    const icon = L.divIcon({className:'town-x', html:'<span aria-hidden="true">×</span>', iconSize:[32,32], iconAnchor:[16,16]});
+    towns.forEach(town => {
+      L.marker(town.point, {icon, title:town.name, alt:town.name})
+        .addTo(map)
+        .bindTooltip(town.name, {permanent:true, direction:'top', offset:[0,-18], className:'town-label'})
+        .bindPopup('<strong>' + town.name + '</strong>');
+    });
+    const bounds = L.latLngBounds(towns.map(town => town.point));
+    function fitTowns() {map.invalidateSize(); map.fitBounds(bounds, {paddingTopLeft:[55,65], paddingBottomRight:[55,35], maxZoom:11});}
+    fitTowns();
+    window.addEventListener('resize', fitTowns);
+  </script>
+</body>
+</html>
