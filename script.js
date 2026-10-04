@@ -1,340 +1,40 @@
-const STORAGE_KEY = "nearwellLeads";
-const POPUP_DISMISSED_KEY = "nearwellPopupDismissed";
-const POPUP_SUBMITTED_KEY = "nearwellPopupSubmitted";
-
-const audienceContent = {
-  commuters: {
-    label: "Morning rush audience",
-    headline: "Order before the train pulls in.",
-    description:
-      "Target early commuters with quick pickup language, pre-9 AM bundles, and a CTA centered on saving time.",
-    offer: "Coffee + croissant ready in 8 minutes",
-    cta: "Reserve pickup",
-    kicker: "Commuter-ready in Greenwich",
-    title: "The fastest better-coffee stop before the platform.",
-    copy: "Warm breakfast, quick pickup, and zero wasted minutes during the morning rush.",
-    insight: "AI insight: focus ad spend within a 2-mile morning commuter radius near the station."
-  },
-  professionals: {
-    label: "Midday professional audience",
-    headline: "Lunch worth stepping away for.",
-    description:
-      "Speak to professionals who want a short, polished break with pre-built bundles and easy order flows.",
-    offer: "Cold brew + grain bowl lunch bundle",
-    cta: "View the lunch offer",
-    kicker: "Downtown Tarrytown lunch crowd",
-    title: "A sharper midday stop for professionals on a clock.",
-    copy: "Promote speed, quality, and a comfortable pause that still fits inside the workday.",
-    insight: "AI insight: emphasize 11:30 AM to 1:30 PM messaging within walkable downtown blocks."
-  },
-  families: {
-    label: "Weekend family audience",
-    headline: "Turn one stop into an easy weekend tradition.",
-    description:
-      "Use family-friendly language, bundled pastry offers, and soft weekend imagery to increase group visits.",
-    offer: "Family pastry box + two drinks for $18",
-    cta: "See the weekend menu",
-    kicker: "Family weekend traffic",
-    title: "Make the neighborhood stop feel simple, warm, and worth repeating.",
-    copy: "Lead with comfort, easy seating, and offers that make family visits feel effortless.",
-    insight: "AI insight: shift creative on Thursday night to capture Friday-through-Sunday planning."
-  }
+const menu = document.querySelector('.menu-toggle');
+const navigation = document.querySelector('#navigation');
+menu?.addEventListener('click', () => { const open = menu.getAttribute('aria-expanded') !== 'true'; menu.setAttribute('aria-expanded', String(open)); navigation.classList.toggle('is-open', open); menu.textContent = open ? 'Close −' : 'Menu +'; });
+navigation?.addEventListener('click', event => { if (event.target.closest('a') && menu.getAttribute('aria-expanded') === 'true') menu.click(); });
+document.addEventListener('keydown', event => {if (event.key === 'Escape' && menu?.getAttribute('aria-expanded') === 'true') {menu.click(); menu.focus();}});
+const ideas = {
+ cafe: {image:'assets/coffee.jpg',alt:'Fresh coffee being prepared',kicker:'FROM QUICK STOP TO DAILY RITUAL',title:'Their morning starts with you.',description:'Bring your atmosphere online. Put the menu, hours, and directions one tap away, then give the neighborhood a reason to try something new.',action:'A seasonal drink spotlight with a clear “find us” link.',business:'Coffee shop'},
+ salon: {image:'assets/salon.jpg',alt:'A bright salon with styling stations',kicker:'FROM LOOKING TO BOOKING',title:'Make a great first impression.',description:'Let your work speak before someone walks through the door. A clear service menu, a feel for your space, and an easy path to booking can make choosing you feel natural.',action:'A signature-service page that leads straight to your booking tool.',business:'Salon or studio'},
+ shop: {image:'assets/cafe.jpg',alt:'An inviting local business interior',kicker:'FROM PASSING BY TO POPPING IN',title:'Give them a reason to stop.',description:'Show people what makes your business worth the trip. Tell the story behind your work, put useful details up front, and make each new arrival or offer easy to discover.',action:'A neighborhood introduction with a featured product or service.',business:'Shop or local service'}
 };
-
-const businessTypes = [
-  "Coffee shop",
-  "Restaurant",
-  "Fitness studio",
-  "Retail boutique",
-  "Dental practice",
-  "Medical office",
-  "Home services business",
-  "Salon",
-  "Real estate office",
-  "Law firm",
-  "Day spa",
-  "Bakery"
-];
-
-const demographics = [
-  "Commuters",
-  "Young professionals",
-  "Families",
-  "Empty nesters",
-  "Weekend visitors",
-  "Students",
-  "Luxury shoppers",
-  "Homeowners",
-  "Renters",
-  "Health-conscious buyers",
-  "Remote workers",
-  "Parents",
-  "Tourists",
-  "High-intent local searchers"
-];
-
-function $(selector) {
-  return document.querySelector(selector);
+document.querySelectorAll('[data-idea]').forEach(button => button.addEventListener('click', () => {
+ const data=ideas[button.dataset.idea];
+ document.querySelectorAll('[data-idea]').forEach(other=>other.setAttribute('aria-pressed',String(other===button)));
+ document.querySelector('#idea-image').src=data.image; document.querySelector('#idea-image').alt=data.alt;
+ for (const key of ['kicker','title','description','action']) document.querySelector('#idea-'+key).textContent=data[key];
+ document.querySelector('#idea-link').href='demo.html?business='+encodeURIComponent(data.business);
+}));
+const form=document.querySelector('#project-form');
+if(form){
+ let step=0; let brief=''; const steps=[...document.querySelectorAll('.form-step')];
+ const captions=['YOUR BUSINESS','YOUR NEXT CHAPTER','YOUR DETAILS'];
+ const type=new URLSearchParams(location.search).get('business'); if(type) form.elements.businessType.value=type;
+ function showStep(index){step=index;steps.forEach((section,i)=>{section.hidden=i!==step; section.querySelectorAll('input,select,textarea').forEach(field=>field.disabled=i!==step);});document.querySelector('#step-caption').textContent=`0${step+1} / ${captions[step]}`;document.querySelector('#step-count').textContent=`${step+1} of 3`;document.querySelector('#progress-fill').style.width=`${(step+1)/3*100}%`;document.querySelector('#back-step').hidden=step===0;document.querySelector('#next-step').hidden=step===2;document.querySelector('#finish').hidden=step!==2;document.querySelector('#brief-summary').textContent=`${form.elements.business.value} · ${form.elements.town.value} — ${form.elements.goal.value}`;}
+ function validStep(){for(const field of steps[step].querySelectorAll('input,textarea,select')) if(!field.reportValidity())return false; return true;}
+ document.querySelector('#next-step').addEventListener('click',()=>{if(validStep()){showStep(step+1);steps[step].querySelector('input,textarea,select').focus();}});
+ document.querySelector('#back-step').addEventListener('click',()=>{showStep(step-1);steps[step].querySelector('input,textarea,select').focus();});
+ form.addEventListener('submit',event=>{event.preventDefault();if(step<2){document.querySelector('#next-step').click();return;}if(!validStep())return;
+ const labels={business:'Business',businessType:'Business type',town:'Location',website:'Website',goal:'Main goal',audience:'Ideal customers',notes:'Notes',budget:'Budget',name:'Your name',email:'Email'};
+ brief='NEARWELL — YOUR PROJECT BRIEF\n\n'+Object.entries(labels).map(([key,label])=>`${label}: ${form.elements[key].value.trim()||'Not specified'}`).join('\n\n')+'\n\nCreated in the NearWell preview. This brief has not been sent.\n';
+ form.hidden=true;document.querySelector('#complete').hidden=false;document.querySelector('#download-brief').focus();
+ });
+ document.querySelector('#download-brief').addEventListener('click',()=>{const url=URL.createObjectURL(new Blob([brief],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='nearwell-project-brief.txt';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+ document.querySelector('#edit-brief').addEventListener('click',()=>{document.querySelector('#complete').hidden=true;form.hidden=false;showStep(0);form.elements.business.focus();});
+ showStep(0);
 }
-
-function $all(selector) {
-  return Array.from(document.querySelectorAll(selector));
+if (form) {
+ const goalPresets={website:'A new or better website',local:'Reaching more local customers',ideas:'Content and campaign ideas'};
+ const selectedGoal=goalPresets[new URLSearchParams(location.search).get('goal')];
+ if(selectedGoal) form.elements.goal.value=selectedGoal;
 }
-
-function initializeMobileMenu() {
-  const toggle = $(".menu-toggle");
-  const mobileNav = $("#mobileNav");
-
-  if (!toggle || !mobileNav) {
-    return;
-  }
-
-  toggle.addEventListener("click", () => {
-    const isOpen = toggle.getAttribute("aria-expanded") === "true";
-    toggle.setAttribute("aria-expanded", String(!isOpen));
-    mobileNav.hidden = isOpen;
-  });
-}
-
-function initializeAudienceTabs() {
-  const tabs = $all(".audience-tab");
-  if (!tabs.length) {
-    return;
-  }
-
-  const nodes = {
-    label: $("#audienceLabel"),
-    headline: $("#audienceHeadline"),
-    description: $("#audienceDescription"),
-    offer: $("#audienceOffer"),
-    cta: $("#audienceCta"),
-    kicker: $("#previewKicker"),
-    title: $("#previewTitle"),
-    copy: $("#previewCopy"),
-    insight: $("#insightNote")
-  };
-
-  function updateAudience(audience) {
-    const data = audienceContent[audience];
-    if (!data) {
-      return;
-    }
-
-    nodes.label.textContent = data.label;
-    nodes.headline.textContent = data.headline;
-    nodes.description.textContent = data.description;
-    nodes.offer.textContent = data.offer;
-    nodes.cta.textContent = data.cta;
-    nodes.kicker.textContent = data.kicker;
-    nodes.title.textContent = data.title;
-    nodes.copy.textContent = data.copy;
-    nodes.insight.textContent = data.insight;
-
-    tabs.forEach((tab) => {
-      tab.classList.toggle("is-active", tab.dataset.audience === audience);
-    });
-  }
-
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => updateAudience(tab.dataset.audience));
-  });
-}
-
-function initializeGeoMap() {
-  const slider = $("#radiusSlider");
-  const radiusValue = $("#radiusValue");
-  const radiusMirror = $("#radiusMirror");
-  if (!slider || !radiusValue) return;
-  function updateRadius() {
-    radiusValue.textContent = `${slider.value} miles`;
-    if (radiusMirror) radiusMirror.value = slider.value;
-  }
-  slider.addEventListener("input", updateRadius);
-  updateRadius();
-}
-
-function initializeDemographicChips() {
-  const chipRoot = $("#demographicChips");
-  const hiddenInput = $("#demographicsInput");
-
-  if (!chipRoot || !hiddenInput) {
-    return;
-  }
-
-  chipRoot.innerHTML = demographics.map((item) => {
-    return `<button class="chip" type="button" data-value="${item}">${item}</button>`;
-  }).join("");
-
-  chipRoot.addEventListener("click", (event) => {
-    const chip = event.target.closest(".chip");
-    if (!chip) {
-      return;
-    }
-
-    chip.classList.toggle("is-selected");
-    const selected = $all(".chip.is-selected").map((node) => node.dataset.value);
-    hiddenInput.value = selected.join(", ");
-  });
-}
-
-function initializeBusinessSuggestions() {
-  const input = $("#businessTypeInput");
-  const suggestions = $("#businessSuggestions");
-
-  if (!input || !suggestions) {
-    return;
-  }
-
-  function renderSuggestions(value) {
-    const query = value.trim().toLowerCase();
-    if (!query) {
-      suggestions.hidden = true;
-      suggestions.innerHTML = "";
-      return;
-    }
-
-    const matches = businessTypes.filter((item) => item.toLowerCase().includes(query)).slice(0, 5);
-    if (!matches.length) {
-      suggestions.hidden = true;
-      suggestions.innerHTML = "";
-      return;
-    }
-
-    suggestions.hidden = false;
-    suggestions.innerHTML = matches.map((item) => {
-      return `<button class="suggestion-button" type="button" data-value="${item}">${item}</button>`;
-    }).join("");
-  }
-
-  input.addEventListener("input", () => renderSuggestions(input.value));
-
-  suggestions.addEventListener("click", (event) => {
-    const button = event.target.closest(".suggestion-button");
-    if (!button) {
-      return;
-    }
-
-    input.value = button.dataset.value;
-    suggestions.hidden = true;
-    suggestions.innerHTML = "";
-  });
-
-  document.addEventListener("click", (event) => {
-    if (!suggestions.contains(event.target) && event.target !== input) {
-      suggestions.hidden = true;
-    }
-  });
-}
-
-function persistLead(formData, source) {
-  const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-  existing.push({
-    source,
-    submittedAt: new Date().toISOString(),
-    ...formData
-  });
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
-}
-
-function readForm(form) {
-  const data = new FormData(form);
-  return Object.fromEntries(data.entries());
-}
-
-function attachFormHandlers() {
-  $all(".capture-form").forEach((form) => {
-    const status = form.querySelector(".form-status");
-
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const formData = readForm(form);
-      const source = form.dataset.formKind || "unknown";
-
-      persistLead(formData, source);
-
-      if (source === "popup") {
-        localStorage.setItem(POPUP_SUBMITTED_KEY, "true");
-      }
-
-      form.reset();
-
-      if ($("#demographicsInput")) {
-        $("#demographicsInput").value = "";
-      }
-
-      $all(".chip.is-selected").forEach((chip) => chip.classList.remove("is-selected"));
-
-      if (status) {
-        status.textContent = "Saved locally. When you connect a live form service, these fields are ready to post.";
-      }
-
-      if (source === "popup") {
-        setTimeout(closeModal, 700);
-      }
-    });
-  });
-}
-
-function openModal() {
-  const modal = $("#leadModal");
-  if (!modal) {
-    return;
-  }
-
-  modal.classList.add("is-visible");
-  modal.setAttribute("aria-hidden", "false");
-  document.body.classList.add("modal-open");
-}
-
-function closeModal() {
-  const modal = $("#leadModal");
-  if (!modal) {
-    return;
-  }
-
-  modal.classList.remove("is-visible");
-  modal.setAttribute("aria-hidden", "true");
-  document.body.classList.remove("modal-open");
-}
-
-function initializePopup() {
-  const modal = $("#leadModal");
-  if (!modal) {
-    return;
-  }
-
-  const closeButton = $(".modal-close");
-  const backdrop = $(".lead-modal__backdrop");
-  const launchers = $all(".open-popup");
-
-  closeButton?.addEventListener("click", () => {
-    localStorage.setItem(POPUP_DISMISSED_KEY, "true");
-    closeModal();
-  });
-
-  backdrop?.addEventListener("click", () => {
-    localStorage.setItem(POPUP_DISMISSED_KEY, "true");
-    closeModal();
-  });
-
-  launchers.forEach((button) => {
-    button.addEventListener("click", openModal);
-  });
-
-  const dismissed = localStorage.getItem(POPUP_DISMISSED_KEY) === "true";
-  const submitted = localStorage.getItem(POPUP_SUBMITTED_KEY) === "true";
-
-  if (document.body.dataset.autoPopup === "true" && !dismissed && !submitted) {
-    window.setTimeout(openModal, 5000);
-  }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  initializeMobileMenu();
-  initializeAudienceTabs();
-  initializeGeoMap();
-  initializeDemographicChips();
-  initializeBusinessSuggestions();
-  attachFormHandlers();
-  initializePopup();
-});

@@ -1,27 +1,18 @@
-# NearWell Greenwich Static Site
+# NearWell — Project number 3
 
-This is a host-ready static website for NearWell with:
+A Yieldmo-inspired visual direction adapted for NearWell: centered bold typography, black pill buttons, original animated blue artwork, pink audience tabs, lavender sections, and a dark footer.
 
-- `index.html` for the homepage
-- `demo.html` for the demo request page
-- `styles.css` for base components
-- `theme.css` for the shared homepage and demo visual theme
-- `script.js` for tabs, popup, slider, chips, and local form behavior
+Design reference: https://yieldmo.com . This is an independent NearWell concept, not affiliated with Yieldmo. NearWell branding and content are used throughout.
 
-## Notes
+## Preview
+Run `python3 -m http.server 8000 --bind 127.0.0.1` and open http://localhost:8000.
 
-- No Python server or app server is required for the site code itself.
-- You can open `index.html` directly or upload the folder contents to hosting on `dannyyavo.com`.
-- Form submissions are currently saved in `localStorage` so the full UI works in a static environment.
-- Before production lead capture, connect the forms to a real service such as your hosting provider's form handler, Formspree, Basin, or a custom endpoint.
+The three-step planner creates a downloadable brief; it does not send inquiries or persist answers. A contact backend is needed before accepting real inquiries.
 
-## Suggested upload structure
+Local images are illustrative Unsplash photography, not claimed client work. Google Fonts, Leaflet, and OpenStreetMap require internet access. Motion respects reduced-motion preferences.
 
-If you want this at a subpath, upload these files into something like:
+## Earlier projects
+- Project 1: https://github.com/yavonditte123-eng/nearwell-greenwich-static
+- Project 2: https://github.com/yavonditte123-eng/nearwell-project-number-2
 
-`dannyyavo.com/nearwell/`
-
-Then the public pages would be:
-
-- `/nearwell/`
-- `/nearwell/demo.html`
+Project 2 remains in its separate repository. The original Project 1 design is preserved in the `website-number-1` Git tag and the local Website number 1 ZIP. This repository now publishes Project 3 at https://yavonditte123-eng.github.io/nearwell-greenwich-static/.
