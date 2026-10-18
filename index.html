@@ -1,11 +1,52 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <title>New Website</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Daniel Yavonditte | About the founder of NearWell</title>
+  <meta name="description" content="Meet Daniel Yavonditte, founder of NearWell, a Greenwich student at St. Luke’s School.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="bio.css">
+  <script src="bio.js" defer></script>
 </head>
 <body>
-  <center><H1>Daniel Yavonditte</H1></center>
-  Hello my name is Danny. I am a 12th grader at St. Luke's School in Greenwich, Connecticut. I started NearWell to help local businesses with their websites and marketing. I want to make it easier for the places that give a neighborhood its character to connect with the people around them. NearWell is where I'm putting that idea to work.
-<a href="nearwell.html">My Website</a>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="bio-header">
+    <a class="brand" href="nearwell.html">NearWell<span>Good business. Great neighbors.</span></a>
+    <a class="back-link" href="nearwell.html">Back to NearWell ↗</a>
+  </header>
+  <main id="main">
+    <section class="bio-hero">
+      <div>
+        <span class="eyebrow">The person behind NearWell</span>
+        <h1>Hi, I’m<br><em>Daniel.</em></h1>
+        <p class="intro">A student from Greenwich.<br>A founder with a local focus.</p>
+        <p>I’m Daniel Yavonditte, a 12th grader at St. Luke’s School from Greenwich, Connecticut. I started NearWell to help local businesses with their websites and marketing.</p>
+        <div class="quick-facts"><span>Greenwich, Connecticut</span><span>St. Luke’s School · Grade 12</span></div>
+      </div>
+      <figure class="portrait">
+        <!-- Replace this placeholder with your approved portrait when ready. -->
+        <div class="portrait-frame">
+          <img id="portrait-preview" alt="Portrait of Daniel Yavonditte" hidden>
+          <div id="portrait-placeholder"><span aria-hidden="true" class="portrait-symbol">+</span><h2>A face to the name.</h2><p>Your portrait goes here.</p></div>
+        </div>
+        <figcaption>
+          <label class="photo-button" for="portrait-input">Choose a photo to preview</label>
+          <input id="portrait-input" type="file" accept="image/jpeg,image/png,image/webp" class="file-input">
+          <button id="remove-photo" type="button" hidden>Remove preview</button>
+          <p id="photo-status" role="status">Local preview only. Your photo isn’t uploaded or saved to the website.</p>
+        </figcaption>
+      </figure>
+    </section>
+    <nav class="bio-nav" aria-label="Bio sections"><a href="#story">My story</a><a href="#education">Education</a><a href="#experience">Experience</a><a href="#interests">Beyond NearWell</a></nav>
+    <section class="bio-section" id="story"><div><span class="eyebrow">01 / My story</span><h2>Local roots.<br><em>A reason to start.</em></h2></div><div><p>I want to make it easier for the places that give a neighborhood its character to connect with the people around them. NearWell is where I’m putting that idea to work.</p><p>My focus is on helping local businesses tell their stories online, with websites and marketing that feel like an extension of the business itself.</p><a class="text-link" href="nearwell.html">Explore what I’m building at NearWell ↗</a></div></section>
+    <section class="bio-section" id="education"><div><span class="eyebrow">02 / Education</span><h2>Learning.<br><em>Then putting it to work.</em></h2></div><div><article class="entry"><span class="entry-label">Current school</span><h3>St. Luke’s School</h3><p>12th grade</p><p class="placeholder">Space for favorite subjects, school activities, and academic interests.</p><!-- Add Daniel’s subjects, activities, and achievements here. --></article></div></section>
+    <section class="bio-section" id="experience"><div><span class="eyebrow">03 / Experience</span><h2>What I’m<br><em>working on.</em></h2></div><div><article class="entry"><span class="entry-label">Founder</span><h3>NearWell</h3><p>I started NearWell to help local businesses with their websites and marketing.</p><p class="placeholder">Space for specific projects, responsibilities, and what you learned.</p></article><article class="entry"><span class="entry-label">More of my experience</span><h3>The next part of the story.</h3><p class="placeholder">Add work experience, volunteering, clubs, or a personal project here when you’re ready.</p><!-- Add only confirmed experiences, dates, and results. --></article></div></section>
+    <section class="bio-section" id="interests"><div><span class="eyebrow">04 / Beyond NearWell</span><h2>A little more<br><em>about me.</em></h2></div><div class="interest-grid"><article><h3>Outside the classroom</h3><p class="placeholder">Space for hobbies, sports, creative interests, and how you spend your time.</p></article><article><h3>What’s next</h3><p class="placeholder">Space for future goals and things you’d like to learn or build.</p></article></div></section>
+    <section class="bio-outro"><span class="eyebrow">See the idea in action</span><h2>Good things start<br>close to home.</h2><a class="button" href="nearwell.html">Visit NearWell ↗</a></section>
+  </main>
+  <footer><span>Daniel Yavonditte · Founder, NearWell</span><a href="nearwell.html">Back to the website ↗</a></footer>
 </body>
 </html>
