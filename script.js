@@ -21,7 +21,8 @@ if(form){
  const captions=['YOUR BUSINESS','YOUR NEXT CHAPTER','YOUR DETAILS'];
  const type=new URLSearchParams(location.search).get('business'); if(type) form.elements.businessType.value=type;
  function showStep(index){step=index;steps.forEach((section,i)=>{section.hidden=i!==step; section.querySelectorAll('input,select,textarea').forEach(field=>field.disabled=i!==step);});document.querySelector('#step-caption').textContent=`0${step+1} / ${captions[step]}`;document.querySelector('#step-count').textContent=`${step+1} of 3`;document.querySelector('#progress-fill').style.width=`${(step+1)/3*100}%`;document.querySelector('#back-step').hidden=step===0;document.querySelector('#next-step').hidden=step===2;document.querySelector('#finish').hidden=step!==2;document.querySelector('#brief-summary').textContent=`${form.elements.business.value} · ${form.elements.town.value} — ${form.elements.goal.value}`;}
- function validStep(){for(const field of steps[step].querySelectorAll('input,textarea,select')) if(!field.reportValidity())return false; return true;}
+ form.addEventListener('keydown', event => {if(event.key === 'Enter' && event.target.tagName === 'INPUT' && step < 2){event.preventDefault(); document.querySelector('#next-step').click();}});
+ function validStep(){for(const field of steps[step].querySelectorAll('input,textarea,select')) {if (field.required && field.tagName !== 'SELECT') {field.value = field.value.trim();} if(!field.reportValidity())return false;} return true;}
  document.querySelector('#next-step').addEventListener('click',()=>{if(validStep()){showStep(step+1);steps[step].querySelector('input,textarea,select').focus();}});
  document.querySelector('#back-step').addEventListener('click',()=>{showStep(step-1);steps[step].querySelector('input,textarea,select').focus();});
  form.addEventListener('submit',event=>{event.preventDefault();if(step<2){document.querySelector('#next-step').click();return;}if(!validStep())return;
